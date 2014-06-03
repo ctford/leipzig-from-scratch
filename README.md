@@ -1,4 +1,9 @@
-leipzig-from-scratch
-====================
+# Leipzig from scratch
 
-I show you how to make a simple track using Leipzig, Overtone and Clojure, from "lein new" onwards.
+A demonstration of using [Leipzig](https://github.com/ctford/leipzig) to build a simple track.
+
+## License
+
+Copyright © 2014 Chris Ford 
+
+Distributed under the MIT Licence.
