@@ -13,10 +13,10 @@
       (* (env-gen (perc 0.01 0.3) :action FREE))
       (* 2/3)))
 
-(definst bass [freq 110]
+(definst bass [freq 110 fuzz 1]
   (-> freq
       saw
-      (rlpf (line:kr freq (* freq 2) 1))
+      (rlpf (line:kr (* freq fuzz) (* freq fuzz 2) 1))
       (* (env-gen (perc 0.1 0.4) :action FREE))))
 
 (definst organ [freq 440 dur 1]
@@ -29,7 +29,7 @@
       (* (env-gen (adsr 0.01 0.2 0.6) (line:kr 1 0 dur) :action FREE))
       (* 1/10)))
 
-(defmethod live/play-note :default [{hertz :pitch}] (bass hertz))
+(defmethod live/play-note :default [{hertz :pitch ceiling :fuzz}] (bass hertz (or ceiling 1)))
 (defmethod live/play-note :beat [{hertz :pitch}] (kick hertz))
 (defmethod live/play-note :accompaniment [{hertz :pitch seconds :duration}] (organ hertz seconds))
 
@@ -60,3 +60,38 @@
     (where :pitch (comp temperament/equal scale/A scale/minor))
     (where :time (bpm 90))
     (where :duration (bpm 90))))
+
+(def full-track
+  "A post-facto rendering of the track."
+  (->>
+    (->> beat (where :pitch (is -14)) (take-while #(-> % :time (<= 6))))
+
+    (then (after 3/2 
+                 (with beat
+                   (mapthen bassline progression))))
+
+    (then (with beat
+            (mapthen bassline progression)
+            (mapthen accompaniment progression)))
+
+    (then (with beat
+            (->>
+              (mapthen bassline progression)
+              (where :fuzz (is 5)))))
+
+    (then (with beat
+            (->>
+              (mapthen bassline progression)
+              (where :fuzz (is 5)))
+            (mapthen accompaniment progression)))
+
+    (then (with beat
+            (mapthen bassline progression)))
+
+    (where :pitch (comp temperament/equal scale/A scale/minor))
+    (where :time (bpm 90))
+    (where :duration (bpm 90))))
+
+(comment
+  (live/play full-track)
+)
