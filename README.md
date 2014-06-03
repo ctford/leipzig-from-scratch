@@ -4,6 +4,11 @@ A demonstration of using [Leipzig](https://github.com/ctford/leipzig) to build a
 
 See the [video](https://www.youtube.com/watch?v=Lp_kQh34EWA) of its creation.
 
+## Credits
+* [Overtone](http://overtone.github.io/)
+* [Vim Fireplace](https://github.com/tpope/vim-fireplace)
+* [Vim Paredit](http://www.vim.org/scripts/script.php?script_id=3998)
+
 ## License
 
 Copyright © 2014 Chris Ford 
